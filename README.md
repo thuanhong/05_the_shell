@@ -40,18 +40,18 @@ First, that's a given, your shell has to respect all the rules of the minish. Th
 
 Now, here is the list of features you may add, with an estimation of their difficulty:
 
-- globbing â˜…âœ©âœ©âœ©
-- path expansions (tilde expansions, parameter expansions) â˜…âœ©âœ©âœ©
-- pipes & the redirections `>`, `<`, `>>` and `<<` â˜…â˜…â˜…âœ©
-- handling the exit status of commands â˜…âœ©âœ©âœ©
-- command substitution with the backquotes â˜…â˜…âœ©âœ©
-- logical operators `&&` and `||` â˜…â˜…âœ©âœ©
-- signals handling â˜…â˜…âœ©âœ©
-- subshells with `()` â˜…â˜…âœ©âœ©
-- quoting (quotes & escape characters) â˜…âœ©âœ©âœ©
-- command-line edition with the curses module (being able to move the cursor with arrows left & right to edit some part of the line, key combination of your choice to go at the beginning & at the end of the line, arrows up & down to move inside the history...) â˜…â˜…â˜…âœ©
-- the command history with the builtins `history` and `!` â˜…â˜…âœ©âœ©
-- dynamic command completion â˜…â˜…âœ©âœ©
+- globbing
+- path expansions (tilde expansions, parameter expansions)
+- pipes & the redirections `>`, `<`, `>>` and `<<`
+- handling the exit status of commands
+- command substitution with the backquotes
+- logical operators `&&` and `||`
+- signals handling
+- subshells with `()`
+- quoting (quotes & escape characters)
+- command-line edition with the curses module (being able to move the cursor with arrows left & right to edit some part of the line, key combination of your choice to go at the beginning & at the end of the line, arrows up & down to move inside the history...)
+- the command history with the builtins `history` and `!`
+- dynamic command completion
 
 You have to pick *at least* 6 of those features and implement them. The more the better... **as long as everything's stable!**
 
@@ -75,12 +75,12 @@ But they are also extremely gratifying. Implementing the shell script is very re
 
 I encourage you to consider those bonuses if you want a good challenge, though you need to be very careful in the way you design your program. You don't want to end up with an unstable shell because those features are half-finished!
 
-## Job control â˜…â˜…â˜…â˜…
+## Job control
 Implement job control with the operator `&` and the builtins `jobs`, `fg`, `bg`.
 
 Job control implies some special handling for compound commands (pipes, subshells...) & affects signals handling as well, so you need to have those implemented and stable first. There's not a lot of code to produce, but a really good understanding of system internals is required.
 
-## Shell script â˜…â˜…â˜…â˜…
+## Shell script
 To implement shell script, you need to handle the POSIX shell grammar. You'll need to research how to generate an abstract syntax tree (lexing and parsing will give you one!), and you will need to code the execution of that AST.
 
 The raw difficulty probably lies around the concept of lexing and parsing. You can use tools like Lex & Yacc to abstract that difficulty if you are short on time, though building your own lexer & parser would be pretty cool.
