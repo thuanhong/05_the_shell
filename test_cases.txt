@@ -1,0 +1,103 @@
+test truoc 4h == [ test 'truoc 4h]'
+
+-------------------------------------------------------------------------------
+
+CASE 1: A
+
+**input:
+echo \[ "`cat ~/te??.txt`" "'$(echo `echo truoc ${var1:=${var2:=4h}}\]`)'"
+
+**list:
+['echo', 'test truoc 4h']
+
+**ouput:
+[ test 'truoc 4h]'
+
+-------------------------------------------------------------------------------
+
+CASE 2: A && B
+
+**input:
+echo \[ "`cat ~/te??.txt`" "'$(echo `echo truoc ${var1:=${var2:=4h}}\]`)'"&&echo helloworld
+
+**list:
+[['echo', 'test truoc 4h'], ['&&'], ['echo', 'helloworld']]
+
+**ouput:
+[ test 'truoc 4h]'
+helloworld
+
+-------------------------------------------------------------------------------
+
+CASE 3: A || B
+
+**input:
+echo \[ "`cat ~/te??.txt`" "'$(echo `echo truoc ${var1:=${var2:=4h}}\]`)'"||echo helloworld
+
+**list:
+[['echo', 'test truoc 4h'], ['||'], ['echo', 'helloworld']]
+
+**ouput:
+[ test 'truoc 4h]'
+
+-------------------------------------------------------------------------------
+
+CASE 4: A || B && C
+
+**input:
+echo \[ "`cat ~/te??.txt`" "'$(echo `echo truoc ${var1:=${var2:=4h}}\]`)'"||echo helloworld&&echo helloNgan
+
+**list:
+[['echo', 'test truoc 4h'], ['||'], ['echo', 'helloworld'], ['&&'], ['echo', 'helloNgan']]
+
+**ouput:
+[ test 'truoc 4h]'
+helloNgan
+
+-------------------------------------------------------------------------------
+CASE 5: A || (B && C)
+
+**input:
+echo \[ "`cat ~/te??.txt`" "'$(echo `echo truoc ${var1:=${var2:=4h}}\]`)'"||(echo helloworld&&echo helloNgan)
+
+**list:
+[['echo', 'test truoc 4h'], ['||'], [['echo', 'helloworld'], ['&&'], ['echo', 'helloNgan']]]
+
+**ouput:
+[ test 'truoc 4h]'
+
+-------------------------------------------------------------------------------
+
+CASE 6: A && B || C
+
+**input:
+echo \[ "`cat ~/te??.txt`" "'$(echo `echo truoc ${var1:=${var2:=4h}}\]`)'"&&echo helloworld||echo helloNgan
+
+**list:
+[['echo', 'test truoc 4h'], ['&&'], ['echo', 'helloworld'], ['||'], ['echo', 'helloNgan']]
+
+**ouput:
+[ test 'truoc 4h]'
+helloworld
+
+-------------------------------------------------------------------------------
+
+CASE 7: A && (B || C)
+
+**input:
+echo \[ "`cat ~/te??.txt`" "'$(echo `echo truoc ${var1:=${var2:=4h}}\]`)'"&&(echo helloworld||echo helloNgan)
+
+**list:
+[['echo', 'test truoc 4h'], ['&&'], [['echo', 'helloworld'], ['||'], ['echo', 'helloNgan']]]
+
+**ouput:
+[ test 'truoc 4h]'
+helloworld
+
+-------------------------------------------------------------------------------
+
+CASE 8:
+
+A && B && C = (A && B) && C = A && (B && C)
+
+A || B || C = (A || B) || C = A || (B || C)
