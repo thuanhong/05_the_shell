@@ -4,7 +4,7 @@ from globbing import get_pathname_list
 from tilde_expansion import tilde
 from param_expansion import param
 from command_sub import command_sub
-from handle_backslash import handle_backslash
+from handle_backslash import encode_backslash, decode_backslash, remove_backslash
 
 
 def check_unfinished_input(string):
@@ -20,7 +20,10 @@ def read_input():
 
 
 def handle_input(user_input):
-    #encode_backslash(user_input)
+
+    user_input = encode_backslash(user_input)
+    print(user_input)
+
     # tilde:
     user_input = tilde(user_input)
     print('filter 2:', user_input)
@@ -36,4 +39,7 @@ def handle_input(user_input):
     # command sub:
     user_input = command_sub(user_input)
     print('filter 5:', user_input)
+
+    user_input = remove_backslash(user_input)
+    user_input = decode_backslash(user_input)
     return user_input.split()
