@@ -13,10 +13,14 @@ def recursive(command_list):
     exit_status = 0
     for index, item in enumerate(command_list):
         if item not in [['&&'], ['||']]:
-            if check_nested_list(item):
-                exit_status = recursive(item)
-            else:
-                exit_status = run(item).returncode
+            try:
+                if check_nested_list(item):
+                    recursive(item)
+                else:
+                    run(item)
+            except Exception as e:
+                print(e)
+                exit_status = -1
             try:
                 if not exit_status and command_list[index + 1] == ['||'] \
                         or exit_status and command_list[index + 1] == ['&&']:
@@ -28,10 +32,10 @@ def recursive(command_list):
 
 def main():
     command_list = [['echo', 'hello A'],
-                    ['||'],
-                    [['echo', 'hello B1'], ['||'], ['echo', 'hello B2']],
                     ['&&'],
-                    [[['echo', 'hello C11'], ['&&'], ['echo', 'hello C12']], ['||'], ['echo', 'hello C2']]]
+                    [['echok', 'hello B1'], ['||'], ['echo', 'hello B2']],
+                    ['&&'],
+                    [[['echok', 'hello C11'], ['&&'], ['echo', 'hello C12']], ['||'], ['echo', 'hello C2']]]
     recursive(command_list)
 
 
