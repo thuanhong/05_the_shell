@@ -5,6 +5,7 @@ from param_expansion import param
 from command_sub import command_sub
 from handle_backslash import encode_backslash, decode_backslash, remove_backslash
 from history import save_input, find_command_history
+from logical import split_logical_operator
 
 
 def check_unfinished_input(string):
@@ -49,7 +50,14 @@ def handle_input(user_input, set_vars):
 
     user_input = remove_backslash(user_input)
     user_input = decode_backslash(user_input)
+    print('filter 6:', user_input)
 
     # $?:
     user_input = user_input.replace('$?', str(set_vars['exit_status']))
-    return user_input.split()
+    print('filter 7:', user_input)
+
+    # logical:
+    user_input = split_logical_operator(user_input)
+    print('filter 8:', user_input)
+
+    return user_input

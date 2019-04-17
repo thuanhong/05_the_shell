@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from os import environ
 from input import read_input, handle_input
-from logical import recursive_logical
+from logical import run_logical_operator
 
 
 def setup_global_vars(environ_vars):
@@ -20,10 +20,7 @@ def main():
         user_input = handle_input(user_input, set_vars)
         print('--> handle input:', user_input)
 
-        # user_input = [['echo', 'test truoc 4h'], ['||'], ['echo', 'helloworld'], ['&&'], ['echo', 'helloNgan']]
-        # print('--> logical:', user_input)
-
-        set_vars['exit_status'] = recursive_logical([user_input], set_vars)
+        run_logical_operator(user_input, set_vars)
 
 
 if __name__ == '__main__':
