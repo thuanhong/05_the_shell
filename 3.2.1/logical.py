@@ -2,9 +2,39 @@ from command import run_command
 from re import split
 
 
+# def split_logical_operator(user_input):
+#     return split(r"(&&)\s*(?![^()]*\))|(\|\|)\s*(?![^()]*\))", user_input)
+
+
+def check_nearest(num, num_list):
+    num_list = [i for i in num_list if i != -1]
+    if num_list:
+        return num < min(num_list)
+    return not num == -1
+
+
 def split_logical_operator(user_input):
-    user_input = split(r"(&&)\s*(?![^()]*\))|(\|\|)\s*(?![^()]*\))", user_input)
-    return [item.split() for item in user_input if item]
+    new_input = []
+    if user_input:
+        a = user_input.find('&&')
+        b = user_input.find('||')
+        c = user_input.find('(')
+        d = user_input.rfind(')')
+
+        if check_nearest(a, [b, c]):
+            new_input.append(user_input[:a])
+            new_input.append('&&')
+            new_input += split_logical_operator(user_input[a + 2:])
+        elif check_nearest(b, [a, c]):
+            new_input.append(user_input[:b])
+            new_input.append('||')
+            new_input += split_logical_operator(user_input[b + 2:])
+        elif check_nearest(c, [a, b]):
+            new_input.append(user_input[c:d + 1])
+            new_input += split_logical_operator(user_input[d + 1:])
+        else:
+            new_input.append(user_input)
+    return new_input
 
 
 def run_logical_operator(command_list, set_vars):
