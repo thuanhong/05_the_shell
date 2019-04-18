@@ -1,6 +1,14 @@
 from re import findall
 
 
+def read_history_file(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            return file.readlines()
+    except Exception:
+        return []
+
+
 def save_input(set_vars, uset_input):
     if uset_input:
         set_vars['history'].append(uset_input)
