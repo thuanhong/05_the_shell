@@ -41,7 +41,6 @@ def getVar(variable):
     variable = string
     sub-substring mới này sẽ được dùng để thay thế chính nó trong substring cũ
     """
-
     try:
         if variable.group(0):
             variable = variable.group(0)
@@ -50,8 +49,10 @@ def getVar(variable):
     except AttributeError:
         variable = variable[2:-1]
 
+    print("KKKKK", variable)
+
     if variable in set_variables:
-        variable = set_variables[variable]
+        variable = set_variables[variable]        
 
     elif variable.startswith("#"):
         if variable[1:] in set_variables:
@@ -128,6 +129,9 @@ def getVar(variable):
             variable = set_variables[parameter][len(word):]
         elif parameter not in set_variables or (parameter in set_variables and not set_variables[parameter]):
             variable = ""
+
+    if variable not in set_variables:
+        variable = ""
 
     return variable
 
