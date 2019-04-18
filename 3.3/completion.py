@@ -40,6 +40,8 @@ def find_paths():
 
 def get_completer_function(text, state):
     names = find_paths() + listdir('.') + get_variables()
+    if not text or text == " ":
+        names = listdir('.')
     options = [word for word in names if
                word.startswith(text.replace(" ", ""))]
 
