@@ -58,7 +58,7 @@ def handle_input(user_input, set_vars):
 
     # logical:
     user_input = split_logical_operator(user_input)
-    user_input = [item.split() for item in user_input if item]
+    # user_input = [item.split() for item in user_input if item]
     print('filter 8:', user_input)
 
     return user_input
