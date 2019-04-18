@@ -3,8 +3,6 @@ from re import sub
 
 
 def replace_variable(substring):
-    intek_shell = __import__('intek-sh')
-    set_variables = intek_shell.Set.variables
 
     substring = substring.group(0)
     if substring == "$":
@@ -43,9 +41,6 @@ def getVar(variable):
     variable = string
     sub-substring mới này sẽ được dùng để thay thế chính nó trong substring cũ
     """
-
-    intek_shell = __import__('intek-sh')
-    set_variables = intek_shell.Set.variables
 
     try:
         if variable.group(0):
