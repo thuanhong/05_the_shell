@@ -49,91 +49,87 @@ def getVar(variable):
     except AttributeError:
         variable = variable[2:-1]
 
-    print("KKKKK", variable)
-
     if variable in set_variables:
-        variable = set_variables[variable]        
+        return set_variables[variable]        
 
     elif variable.startswith("#"):
         if variable[1:] in set_variables:
-            variable = str(len(set_variables[variable[1:]]))
+            return str(len(set_variables[variable[1:]]))
         else:
-            variable = "0"
+            return "0"
 
     elif ":-" in variable:
         parameter, word = get_param_and_word(variable, ":-")
         if parameter in set_variables and set_variables[parameter]:
-            variable = set_variables[parameter]
+            return set_variables[parameter]
         elif parameter not in set_variables or (parameter in set_variables and not set_variables[parameter]):
-            variable = word
+            return word
 
     elif "-" in variable:
         parameter, word = get_param_and_word(variable, "-")
         if parameter in set_variables and Sset_variables[parameter]:
-            variable = set_variables[parameter]
+            return set_variables[parameter]
         elif parameter in set_variables and not set_variables[parameter]:
-            variable = ""
+            return ""
         elif parameter not in set_variables:
-            variable = word
+            return word
 
     elif ":=" in variable:
         parameter, word = get_param_and_word(variable, ":=")
         if parameter in set_variables and set_variables[parameter]:
-            variable = set_variables[parameter]
+            return set_variables[parameter]
         elif parameter not in set_variables or (parameter in set_variables and not set_variables[parameter]):
-            variable = word
             set_variables[parameter] = word
+            return word
 
     elif "=" in variable:
         parameter, word = get_param_and_word(variable, "=")
         if parameter in set_variables and set_variables[parameter]:
-            variable = set_variables[parameter]
+            return set_variables[parameter]
         elif parameter in set_variables and not set_variables[parameter]:
-            variable = ""
+            return ""
         elif parameter not in set_variables:
-            variable = word
             set_variables[parameter] = word
+            return word
 
     elif ":+" in variable:
         parameter, word = get_param_and_word(variable, ":+")
         if parameter in set_variables:
-            variable = word
+            return word
         elif parameter in set_variables and not set_variables[parameter]:
-            variable = ""
+           	return ""
         elif parameter not in set_variables:
-            variable = ""
+            return ""
 
     elif "+" in variable:
         parameter, word = get_param_and_word(variable, "+")
         if parameter in set_variables or (parameter in set_variables and not set_variables[parameter]):
-            variable = word
+            return word
         elif parameter not in set_variables:
-            variable = ""
+            return ""
 
     elif "%" in variable:
         variable = variable.replace("%", " ")
         parameter, word = get_param_and_word(variable, None)
         if parameter in set_variables and (not set_variables[parameter].endswith(word) or not word):
-            variable = set_variables[parameter]
+            return set_variables[parameter]
         if parameter in set_variables and set_variables[parameter].endswith(word) and set_variables[parameter] :
-            variable = set_variables[parameter][:-len(word)]
+            return set_variables[parameter][:-len(word)]
         elif parameter not in set_variables or (parameter in set_variables and not set_variables[parameter]):
-            variable = ""
+            return ""
 
     elif "#" in variable:
         variable = variable.replace("#", " ")
         parameter, word = get_param_and_word(variable, None)
         if parameter in set_variables and (not set_variables[parameter].startswith(word) or not word):
-            variable = set_variables[parameter]
+            return set_variables[parameter]
         if parameter in set_variables and set_variables[parameter].startswith(word) and set_variables[parameter]:
-            variable = set_variables[parameter][len(word):]
+            return set_variables[parameter][len(word):]
         elif parameter not in set_variables or (parameter in set_variables and not set_variables[parameter]):
-            variable = ""
+            return ""
 
     if variable not in set_variables:
-        variable = ""
-
-    return variable
+        return ""
 
 
 def search_bracket(arg):
