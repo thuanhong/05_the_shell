@@ -9,14 +9,15 @@ def split_logical_operator(user_input):
 
 def run_logical_operator(command_list, set_vars):
     for index, item in enumerate(command_list):
-        if item not in [['&&'], ['||']]:
+        if item not in ['&&', '||']:
+            print(item)
             try:
                 run_command(item, set_vars)
             except Exception:
                 set_vars['exit_status'] = -1
         try:
-            if (not set_vars['exit_status'] and command_list[index + 1] == ['||']) \
-                    or (set_vars['exit_status'] and command_list[index + 1] == ['&&']):
+            if (not set_vars['exit_status'] and command_list[index + 1] == '||') \
+                    or (set_vars['exit_status'] and command_list[index + 1] == '&&'):
                 break
         except IndexError:
             pass

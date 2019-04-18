@@ -11,6 +11,7 @@ def setup_global_vars(environ_vars):
 
 
 def main():
+
     set_vars = setup_global_vars(environ.copy())
 
     while True:
