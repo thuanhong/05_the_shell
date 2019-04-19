@@ -1,10 +1,10 @@
 from re import sub
 from subprocess import check_output
 from globbing import get_pathname_list
+from
 
 def remove_quotes(substring):
 	return substring.group(0)[1:-1]
-
 
 
 def process_command(command):
@@ -48,7 +48,7 @@ def search_command_sub(arg):
     return substring bị thay đổi
     """
     try:
-        for number in [1,3,4]:
+        for number in [1, 3, 4]:
             if arg.group(number):
                 variable = sub(r"(?<!\\)\$\((?:(?!(?<!\\)\").)*(?<!\\)\)|(?<!\\)\`(?:(?!(?<!\\)\").)*(?<!\\)\`",
                                process_command, arg.group(number))
@@ -57,7 +57,10 @@ def search_command_sub(arg):
         variable = sub(r"(?<!\\)\$\((?:(?!(?<!\\)\").)*(?<!\\)\)|(?<!\\)\`(?:(?!(?<!\\)\").)*(?<!\\)\`",
                        process_command, arg)
         return variable
-    return arg.group(2)
+	if arg.group(2):
+    	return arg.group(2)
+	elif arg.group(5):
+		return arg.group(5)
 
 
 def command_sub(command):
@@ -66,7 +69,7 @@ def command_sub(command):
     từng string trong list commands trong hàm main
     return string đã bị thay đổi
     """
-    user_command = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")|((?<!\\)\'(?:(?!(?<!\\)\').)*\')|((?<!\\)\`(?:(?!(?<!\\)\").)*(?<!\\)\`)|((?<!\\)\$\((?:(?!(?<!\\)\").)*(?<!\\)\))",
+    user_command = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")|((?<!\\)\'(?:(?!(?<!\\)\').)*\')|((?<!\\)\`(?:(?!(?<!\\)\`).)*(?<!\\)\`)|((?<!\\)\$\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))",
                    search_command_sub, command)
     user_command = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")|((?<!\\)\'(?:(?!(?<!\\)\').)*\')", remove_quotes, user_command)
     return user_command
