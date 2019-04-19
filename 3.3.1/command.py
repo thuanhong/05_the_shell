@@ -73,14 +73,13 @@ def unset_variable(arguments, set_vars):
         if arg[0].isnumeric() or arg.startswith('='):
             print("intek-sh: unset: `" + arg + "': not a valid identifier")
             add_set(set_vars, 'exit_status', 1)
-        elif arg in environ:
-            del environ[arg]
-            remove_set(set_vars, arg)
+        elif arg in set_vars:
+            try:
+                del environ[arg]
+            except KeyError:
+                pass
+            del set_vars[arg]
             add_set(set_vars, 'exit_status', 0)
-
-
-def remove_set(set_vars, key):
-    del set_vars[key]
 
 
 def exit_shell(arguments, set_vars):
