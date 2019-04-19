@@ -1,5 +1,6 @@
 from command import run_command
 from re import split
+from os.path import dirname, abspath
 
 
 def split_logical_operator(user_input):
@@ -16,7 +17,7 @@ def run_logical_operator(command_list, set_vars):
                 set_vars['exit_status'] = -1
         elif item not in ['&&', '||']:
             try:
-                run_command(("./intek-sh.py " + item[1:-1] + " && exit $?").split(), set_vars)
+                run_command((dirname(abspath(__file__)) + "/intek-sh.py " + item[1:-1] + " && exit $?").split(), set_vars)
             except Exception:
                 set_vars['exit_status'] = -1
         try:
