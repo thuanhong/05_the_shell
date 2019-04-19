@@ -4,7 +4,7 @@ from os.path import dirname, abspath
 
 
 def split_logical_operator(user_input):
-    new_input = split(r"(\((?:[^\}]*)\))|(&&)\s*(?![^()]*\))|(\|\|)\s*(?![^()]*\))", user_input)
+    new_input = split(r"(&&)\s*(?![^()]*\))|(\|\|)\s*(?![^()]*\))", user_input)
     return [item.strip(' ') for item in new_input if item and item.strip(' ')]
 
 
