@@ -3,18 +3,25 @@ from re import sub
 
 
 def replace_variable(substring):
-
-    substring = substring.group(0)
-    if substring == "$":
-        return "$"
-    elif substring[1:] in set_variables:
-        return set_variables[substring[1:]]
-    else:
-        return ""
+    if substring.group(3) or substring.group(1):
+        if substring.group(3):
+            substring = substring.group(3)
+        else:
+            substring = substring.group(1)
+        if substring == "$":
+            return "$"
+        elif substring[1:] in set_variables:
+            return set_variables[substring[1:]]
+        elif substring[1:] == "?":
+            return str(set_variables['exit_status'])
+        else:
+            return ""
+    elif substring.group(2):
+        return substring.group(2)
 
 
 def change_user_input(user_input):
-    user_input  = sub(r"(?:|(?<=(\s)))\$[\d\w]*", replace_variable, user_input)
+    user_input  = sub(r"((?<!\\)\$\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?:|(?<=(\s)))\$[\d\w\?]*)", replace_variable, user_input)
     return user_input
 
 

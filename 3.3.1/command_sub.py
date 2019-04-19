@@ -1,7 +1,7 @@
 from re import sub
 from subprocess import check_output
 from globbing import get_pathname_list
-from
+
 
 def remove_quotes(substring):
 	return substring.group(0)[1:-1]
@@ -57,10 +57,10 @@ def search_command_sub(arg):
         variable = sub(r"(?<!\\)\$\((?:(?!(?<!\\)\").)*(?<!\\)\)|(?<!\\)\`(?:(?!(?<!\\)\").)*(?<!\\)\`",
                        process_command, arg)
         return variable
-	if arg.group(2):
+    if arg.group(2):
     	return arg.group(2)
-	elif arg.group(5):
-		return arg.group(5)
+    elif arg.group(5):
+        return arg.group(5)
 
 
 def command_sub(command):

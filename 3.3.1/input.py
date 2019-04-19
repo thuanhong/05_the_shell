@@ -21,9 +21,6 @@ def read_input():
 
 
 def handle_input(user_input, set_vars, file_path):
-
-    user_input = user_input.replace("$?", str(set_vars["exit_status"]))
-    user_input = change_user_input(user_input)
     print('filter -1:', user_input)
 
     # find '!':
@@ -43,6 +40,7 @@ def handle_input(user_input, set_vars, file_path):
 
     # param:
     user_input = param(user_input)
+    user_input = change_user_input(user_input)
     print('filter 3:', user_input)
 
     # globbing:
@@ -58,7 +56,6 @@ def handle_input(user_input, set_vars, file_path):
     print('filter 6:', user_input)
 
     # $?:
-    user_input = user_input.replace('$?', str(set_vars['exit_status']))
     print('filter 7:', user_input)
 
     # logical:
