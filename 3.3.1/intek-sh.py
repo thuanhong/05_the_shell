@@ -11,7 +11,6 @@ import param_expansion as param_file
 def create_variables(history_file_path):
     variables = {'exit_status': 0, 'history': read_history_file(history_file_path)}
     variables.update(environ.copy())
-    print(variables['history'])
     return variables
 
 
