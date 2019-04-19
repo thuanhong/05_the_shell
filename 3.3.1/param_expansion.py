@@ -3,11 +3,8 @@ from re import sub
 
 
 def replace_variable(substring):
-    if substring.group(3) or substring.group(1):
-        if substring.group(3):
-            substring = substring.group(3)
-        else:
-            substring = substring.group(1)
+    if substring.group(2):
+        substring = substring.group(2)
         if substring == "$":
             return "$"
         elif substring[1:] in set_variables:
@@ -16,12 +13,12 @@ def replace_variable(substring):
             return str(set_variables['exit_status'])
         else:
             return ""
-    elif substring.group(2):
-        return substring.group(2)
+    elif substring.group(1):
+        return substring.group(1)
 
 
 def change_user_input(user_input):
-    user_input  = sub(r"((?<!\\)\$\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?:|(?<=(\s)))\$[\d\w\?]*)", replace_variable, user_input)
+    user_input  = sub(r"((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?:|(?<=(\s)))\$[\d\w\?]*)", replace_variable, user_input)
     return user_input
 
 
@@ -146,7 +143,7 @@ def search_bracket(arg):
     """
     try:
         for number in [1, 3, 5]:
-            print(arg.group(number))
+            print("KHANG", arg.group(number))
             if arg.group(number):
                 variable = sub(r"(?<!\\)\$\{(?:(?!(?<!\\)\").)*(?<!\\)\}",
                                getVar, arg.group(number))
