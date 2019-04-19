@@ -50,7 +50,7 @@ def getVar(variable):
         variable = variable[2:-1]
 
     if variable in set_variables:
-        return set_variables[variable]        
+        return set_variables[variable]
 
     elif variable.startswith("#"):
         if variable[1:] in set_variables:
@@ -138,7 +138,8 @@ def search_bracket(arg):
     return lại substring đó nhưng đã bị thay đổi
     """
     try:
-        for number in [1,3]:
+        for number in [1, 3, 5]:
+            print(arg.group(number))
             if arg.group(number):
                 variable = sub(r"(?<!\\)\$\{(?:(?!(?<!\\)\").)*(?<!\\)\}",
                                getVar, arg.group(number))
@@ -146,7 +147,10 @@ def search_bracket(arg):
     except AttributeError:
         variable = sub(r"(?<!\\)\$\{(?:(?!(?<!\\)\").)*(?<!\\)\}", getVar, arg)
         return variable
-    return arg.group(2)
+    if arg.group(2):
+        return arg.group(2)
+    elif arg.group(4):
+        return arg.group(4)
 
 
 def search_quotes(arg, set_vars):
@@ -156,7 +160,7 @@ def search_quotes(arg, set_vars):
     return string trên sau khi sửa đổi
     """
 
-    variable = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")|((?<!\\)\'(?:(?!(?<!\\)\').)*\')|((?<!\\)\$\{(?:(?!(?<!\\)\").)*(?<!\\)\})",
+    variable = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")|((?<!\\)\'(?:(?!(?<!\\)\').)*\')|((?<!\\)\$\((?:(?!(?<!\\)\").)*(?<!\\)\))|((?<!\\)\((?:(?!(?<!\\)\").)*(?<!\\)\))|((?<!\\)\$\{(?:(?!(?<!\\)\").)*(?<!\\)\})",
                    search_bracket, arg)
     return variable
 
