@@ -11,10 +11,10 @@ def check_and_move_dir(path, set_vars):
         add_set(set_vars, 'exit_status', 0)
     elif isfile(path):
         print('intek-sh: cd: ' + path + ': Not a directory')
-        add_set(set_vars, 'exit_status', -1)
+        add_set(set_vars, 'exit_status', 1)
     else:
         print('intek-sh: cd: ' + path + ': No such file or directory')
-        add_set(set_vars, 'exit_status', -1)
+        add_set(set_vars, 'exit_status', 1)
 
 
 def change_current_dir(arguments, set_vars):
@@ -25,17 +25,25 @@ def change_current_dir(arguments, set_vars):
             check_and_move_dir(set_vars['HOME'], set_vars)
         else:
             print('intek-sh: cd: HOME not set')
-            add_set(set_vars, 'exit_status', -1)
+            add_set(set_vars, 'exit_status', 1)
 
 
-def print_env_variable(arguments):
+def print_env_variable(arguments, set_vars):
     if arguments:
+        error_flag = False
         for arg in arguments:
             if arg in environ:
                 print(environ[arg])
+            else:
+                error_flag = True
+        if error_flag:
+            add_set(set_vars, 'exit_status', 1)
+        else:
+            add_set(set_vars, 'exit_status', 0)
     else:
         for key, value in environ.items():
             print(key + '=' + value)
+        add_set(set_vars, 'exit_status', 0)
 
 
 def export_variable(arguments, set_vars):
@@ -44,7 +52,7 @@ def export_variable(arguments, set_vars):
             if arg[0].isnumeric() or arg.startswith('='):
                 print("intek-sh: export: `" + arg +
                       "': not a valid identifier")
-                add_set(set_vars, 'exit_status', -1)
+                add_set(set_vars, 'exit_status', 1)
             elif '=' in arg:
                 pos = arg.find('=')
                 environ[arg[:pos]] = arg[pos + 1:]
@@ -64,7 +72,7 @@ def unset_variable(arguments, set_vars):
     for arg in arguments:
         if arg[0].isnumeric() or arg.startswith('='):
             print("intek-sh: unset: `" + arg + "': not a valid identifier")
-            add_set(set_vars, 'exit_status', -1)
+            add_set(set_vars, 'exit_status', 1)
         elif arg in environ:
             del environ[arg]
             remove_set(set_vars, arg)
@@ -84,11 +92,12 @@ def exit_shell(arguments, set_vars):
                     exit()
                 else:
                     print('intek-sh: exit: too many arguments')
-                    add_set(set_vars, 'exit_status', -1)
+                    add_set(set_vars, 'exit_status', 1)
         except ValueError:
             print('intek-sh: exit: ' + arguments[0] +
                   ': numeric argument required')
-            add_set(set_vars, 'exit_status', -1)
+            add_set(set_vars, 'exit_status', 2)
+            exit()
     else:
         add_set(set_vars, 'exit_status', 0)
         exit()
@@ -107,7 +116,7 @@ def display_history(arguments, set_vars):
                   ': numeric argument required')
         else:
             print('intek-sh: history: too many arguments')
-        add_set(set_vars, 'exit_status', -1)
+        add_set(set_vars, 'exit_status', 1)
 
 
 def get_command_path(command, set_vars):
@@ -154,7 +163,7 @@ def run_command(user_input, set_vars):
         if command == 'cd':
             change_current_dir(arguments, set_vars)
         elif command == 'printenv':
-            print_env_variable(arguments)
+            print_env_variable(arguments, set_vars)
         elif command == 'export':
             export_variable(arguments, set_vars)
         elif command == 'unset':

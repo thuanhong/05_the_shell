@@ -4,14 +4,24 @@ from re import findall
 def read_history_file(file_path):
     try:
         with open(file_path, 'r') as file:
-            return file.readlines()
+            x = file.readlines()
+            return x
     except Exception:
         return []
 
 
-def save_input(set_vars, uset_input):
-    if uset_input:
-        set_vars['history'].append(uset_input)
+def save_history_file(file_path, user_input):
+    try:
+        with open(file_path, 'a+') as file:
+            file.write(user_input + '\n')
+    except Exception:
+        pass
+
+
+def save_input(file_path, set_vars, user_input):
+    if user_input:
+        save_history_file(file_path, user_input)
+        set_vars['history'].append(user_input)
 
 
 def print_all_history(history_content):
@@ -20,7 +30,7 @@ def print_all_history(history_content):
         print('{}{}  {}'.format(
             (tab - len(str(line)) + 2) * ' ',
             line,
-            content))
+            content[:-1]))
 
 
 def print_part_history(history_content, number):
@@ -30,7 +40,7 @@ def print_part_history(history_content, number):
         print('{}{}  {}'.format(
             (tab - len(str(line)) + 2) * ' ',
             line,
-            content))
+            content[:-1]))
 
 
 def show_history(arguments, set_vars):

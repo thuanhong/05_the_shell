@@ -2,37 +2,40 @@
 from os import environ
 from input import read_input, handle_input
 from logical import run_logical_operator
-from argparse import ArgumentParser
 from sys import argv
 from os.path import dirname, abspath
 from history import read_history_file
-import param_expansion as file
+import param_expansion as param_file
 
 
-
-def create_variables():
-    variables = {'exit_status': 0, 'history': read_history_file(dirname(abspath(__file__)) + '/.history.txt')}
+def create_variables(history_file_path):
+    variables = {'exit_status': 0, 'history': read_history_file(history_file_path)}
     variables.update(environ.copy())
+    print(variables['history'])
     return variables
 
 
 def main():
+    history_file_path = dirname(abspath(__file__)) + '/.history.txt'
+
     user_input = argv[1:]
-    variables = create_variables()
-    file.set_variables = variables
+    variables = create_variables(history_file_path)
+    param_file.set_variables = variables
+
     if not user_input:
         while True:
             user_input = read_input()
             print('--> raw input:', user_input)
 
-            user_input = handle_input(user_input, variables)
+            user_input = handle_input(user_input, variables, history_file_path)
             print('--> handle input:', user_input)
 
             run_logical_operator(user_input, variables)
     else:
         user_input = ' '.join(user_input)
         print('--> raw input:', user_input)
-        user_input = handle_input(user_input, variables)
+
+        user_input = handle_input(user_input, variables, history_file_path)
         print('--> handle input:', user_input)
 
         run_logical_operator(user_input, variables)

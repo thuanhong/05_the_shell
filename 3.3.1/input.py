@@ -20,17 +20,18 @@ def read_input():
     return string
 
 
-def handle_input(user_input, set_vars):
+def handle_input(user_input, set_vars, file_path):
 
     user_input = user_input.replace("$?", str(set_vars["exit_status"]))
     user_input = change_user_input(user_input)
-    print("abc", user_input)
+    print('filter -1:', user_input)
+
     # find '!':
     user_input = find_command_history(user_input, set_vars)
     print('filter 0:', user_input)
 
     # save:
-    save_input(set_vars, user_input)
+    save_input(file_path, set_vars, user_input)
 
     # backslash:
     user_input = encode_backslash(user_input)
