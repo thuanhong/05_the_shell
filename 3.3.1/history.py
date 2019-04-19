@@ -4,8 +4,7 @@ from re import findall
 def read_history_file(file_path):
     try:
         with open(file_path, 'r') as file:
-            x = file.readlines()
-            return x
+            return [line[:-1] for line in file.readlines()]
     except Exception:
         return []
 
@@ -30,7 +29,7 @@ def print_all_history(history_content):
         print('{}{}  {}'.format(
             (tab - len(str(line)) + 2) * ' ',
             line,
-            content[:-1]))
+            content))
 
 
 def print_part_history(history_content, number):
@@ -40,7 +39,7 @@ def print_part_history(history_content, number):
         print('{}{}  {}'.format(
             (tab - len(str(line)) + 2) * ' ',
             line,
-            content[:-1]))
+            content))
 
 
 def show_history(arguments, set_vars):
