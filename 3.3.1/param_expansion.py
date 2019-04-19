@@ -169,20 +169,6 @@ def search_quotes(arg, set_vars):
     return variable
 
 
-def handle_multi_backslash(argument):
-    """
-    argument = string
-    thường có dạng 'command + arguments'
-    return string trên nhưng đã được sửa đổi
-    """
-
-    if r"\\" in argument:
-        argument = argument.replace(r"\\",r"")
-
-    return argument
-
-
 def param(argument):
-    argument = handle_multi_backslash(argument)
     argument = search_quotes(argument, environ)
     return argument
