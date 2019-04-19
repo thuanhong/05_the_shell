@@ -143,7 +143,6 @@ def search_bracket(arg):
     """
     try:
         for number in [1, 3, 5]:
-            print("KHANG", arg.group(number))
             if arg.group(number):
                 variable = sub(r"(?<!\\)\$\{(?:(?!(?<!\\)\").)*(?<!\\)\}",
                                getVar, arg.group(number))
