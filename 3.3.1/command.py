@@ -84,7 +84,7 @@ def exit_shell(arguments, set_vars):
             if isinstance(int(arguments[0]), int):
                 if len(arguments) == 1:
                     set_vars['exit_status'] = int(arguments[0]) % 256
-                    exit()
+                    exit(set_vars['exit_status'])
                 else:
                     print('intek-sh: exit: too many arguments')
                     set_vars['exit_status'] = 1
@@ -122,8 +122,7 @@ def get_command_path(command, set_vars):
 
 def check_and_run_command(command, arguments, set_vars):
     try:
-        run([command] + arguments)
-        set_vars['exit_status'] = 0
+        set_vars['exit_status'] = run([command] + arguments).returncode
     except PermissionError:
         print('intek-sh: ' + command + ': Permission denied')
         set_vars['exit_status'] = 126
