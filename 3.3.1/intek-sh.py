@@ -41,7 +41,7 @@ def main():
             except (KeyboardInterrupt):
                 print("^C")
             except EOFError:
-                variables[exit_status] = 0
+                variables['exit_status'] = 0
                 print()
     else:
         user_input = ' '.join(user_input)
