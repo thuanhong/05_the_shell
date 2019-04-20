@@ -1,4 +1,3 @@
-from completion import auto_complete
 from globbing import get_pathname_list
 from tilde_expansion import tilde
 from param_expansion import param, change_user_input
@@ -13,14 +12,13 @@ def check_unfinished_input(string):
 
 
 def read_input():
-    auto_complete()
     string = input('\033[1;31mintek-sh$\033[00m ')
     while check_unfinished_input(string):
         string += input('\033[1;31m>\033[00m ')
     return string
 
 
-def handle_input(user_input, set_vars, file_path):
+def handle_input(user_input, set_vars, file_path, save_flag):
     print('filter -1:', user_input)
 
     # find '!':
@@ -28,7 +26,8 @@ def handle_input(user_input, set_vars, file_path):
     print('filter 0:', user_input)
 
     # save:
-    save_input(file_path, set_vars, user_input)
+    if save_flag:
+        save_input(file_path, set_vars, user_input)
 
     # backslash:
     user_input = encode_backslash(user_input)

@@ -1,0 +1,59 @@
+echo a && (echo b || echo c) && (echo d)
+echo echo a && (echo b || echo c) && (echo d)echo a && (echo b || echo c) && (echo d)
+exit
+echo 1
+"echo 1"
+echo ""echo 1""
+echo 1
+echo 2
+echo haha
+echo $?
+echo $?
+echo haha
+echo $?
+echo $?
+echo $?
+echo $?
+echo $/
+echo $?
+echo $?
+echo $?
+echo $?
+echo $?
+echo $?
+echo $?
+echo $?
+echo $?
+print(" ")print(" ")print(" ")print(" ")print(" ")print(" ")print(" ")print(" ")
+echo $?
+echo $?
+echo
+echo
+echo haah
+echo 1 && cat ./signals_handling.py
+echo 1
+echo 2
+echo 2
+echo 2 && echo a && (echo b || echo c) && (echo d)
+echo $?
+echo $?
+echo $?
+echo 
+echo 
+auto_complete
+echo $/
+echo 
+echo $?
+echo $?
+echo $?
+echo $?
+'\033[1;31mintek-sh$\033[00m '==
+echo $?
+echo $?
+ddf
+dgfdg
+echo $/
+echo $?
+echo $?
+echo 
+echo $?

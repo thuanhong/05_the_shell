@@ -6,6 +6,9 @@ from sys import argv
 from os.path import dirname, abspath
 from history import read_history_file
 import param_expansion as param_file
+import signals_handling as signal_file
+from signals_handling import control_signal
+from completion import auto_complete
 
 
 def create_variables(history_file_path):
@@ -20,21 +23,28 @@ def main():
     user_input = argv[1:]
     variables = create_variables(history_file_path)
     param_file.set_variables = variables
+    signal_file.set_variables = variables
+
+    control_signal()
+    auto_complete()
 
     if not user_input:
         while True:
-            user_input = read_input()
-            print('--> raw input:', user_input)
+            try:
+                user_input = read_input()
+                print('--> raw input:', user_input)
 
-            user_input = handle_input(user_input, variables, history_file_path)
-            print('--> handle input:', user_input)
+                user_input = handle_input(user_input, variables, history_file_path, True)
+                print('--> handle input:', user_input)
 
-            run_logical_operator(user_input, variables)
+                run_logical_operator(user_input, variables)
+            except (KeyboardInterrupt, EOFError):
+                print()
     else:
         user_input = ' '.join(user_input)
         print('--> raw input:', user_input)
 
-        user_input = handle_input(user_input, variables, history_file_path)
+        user_input = handle_input(user_input, variables, history_file_path, False)
         print('--> handle input:', user_input)
 
         run_logical_operator(user_input, variables)
