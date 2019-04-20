@@ -8,6 +8,8 @@ from logical import split_logical_operator
 
 
 def check_unfinished_input(string):
+    if string.count('(') != string.count(')'):
+        return True
     return False
 
 
