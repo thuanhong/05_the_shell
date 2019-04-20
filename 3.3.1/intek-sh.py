@@ -41,7 +41,7 @@ def main():
             except (KeyboardInterrupt):
                 print("^C")
             except EOFError:
-                pass
+                print()
     else:
         user_input = ' '.join(user_input)
         print('--> raw input:', user_input)
