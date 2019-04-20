@@ -12,16 +12,24 @@ def too_much_asterisk(key):
     return False
 
 
-def abc(arg):
-    splitted_arg = arg.split("/")
-    for index, key in enumerate(splitted_arg):
-        if not key:
-            splitted_arg.pop(index)
+def glob_asterik(argument):
+    """
+    Solve test case: .*/.*/.* etc.
 
-    number = len(splitted_arg)
+    Return a list of all possible path to glob
+    """
+
+    splitted_argument = argument.split("/")
+    for index, key in enumerate(splitted_argument):
+        if not key:
+            splitted_argument.pop(index)
+
+    number = len(splitted_argument)
     symbols = ['.', '..', '.*']
+    # create all possible string from list of symbols, with 'number' of times
     keywords = ['/'.join(i) for i in product(symbols, repeat=number)]
 
+    # if string has more than one asterik, remove that string
     for index, key in enumerate(keywords):
         if too_much_asterisk(key):
             keywords[index] = ""
@@ -29,22 +37,38 @@ def abc(arg):
     return keywords
 
 
-def pre_globbing(args):
-    for index, arg in enumerate(args):
-        if arg.startswith(".*"):
-            args[index] = abc(arg)
-        else:
-            args[index] = [arg]
+def pre_globbing(arguments):
+    """
+    prepare for globbing
 
-    return (" ".join(sum(args, []))).split()
+    Return a list of path
+    """
+
+    for index, argument in enumerate(arguments):
+        if argument.startswith(".*"):
+            arguments[index] = glob_asterik(argument)
+        else:
+            arguments[index] = [argument]
+
+    return (" ".join(sum(arguments, []))).split()
 
 
 def get_pathname_list(arguments):
+    """
+    Glob the path to find
+    files and folders that user want to get
+
+    Return a list of path after globbing
+    """
+
     arguments = arguments.split()
     pathname_list = []
-    for arg in pre_globbing(arguments):
-        if glob(arg):
-            pathname_list += sorted(glob(arg))
-        elif not glob(arg) and ".*" not in arg:
-            pathname_list += [arg]
+    for argument in pre_globbing(arguments):
+        # check if program can glob the path or not
+        # then add the globbed path to the list
+        if glob(argument):
+            pathname_list += sorted(glob(argument))
+        elif not glob(argument) and ".*" not in argument:
+            pathname_list += [argument]
+
     return (" ").join(pathname_list)
