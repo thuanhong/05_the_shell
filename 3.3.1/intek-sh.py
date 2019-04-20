@@ -38,8 +38,10 @@ def main():
                 print('--> handle input:', user_input)
 
                 run_logical_operator(user_input, variables)
-            except (KeyboardInterrupt, EOFError):
+            except (KeyboardInterrupt):
                 print("^C")
+            except EOFError:
+                pass
     else:
         user_input = ' '.join(user_input)
         print('--> raw input:', user_input)
