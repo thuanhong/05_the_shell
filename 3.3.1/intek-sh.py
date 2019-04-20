@@ -39,7 +39,7 @@ def main():
 
                 run_logical_operator(user_input, variables)
             except (KeyboardInterrupt, EOFError):
-                print()
+                print("^C")
     else:
         user_input = ' '.join(user_input)
         print('--> raw input:', user_input)
