@@ -14,7 +14,6 @@ def process_command(command):
     Then run that command
     And return that command's output
     """
-
     try:
         if command.group(0):
             command = command.group(0)
@@ -31,7 +30,6 @@ def process_command(command):
             command = command[2:-1]
         elif command.startswith("`"):
             command = command[1:-1]
-
     command = command.split()
     if len(command) > 1:
         # create list of arguments
@@ -40,7 +38,6 @@ def process_command(command):
     else:
         # no argument
         arguments = [" "]
-
     command = command[0]
     # get output
     output = check_output([command] + arguments).decode("utf-8")
@@ -73,7 +70,6 @@ def search_command_sub(arg):
         variable = sub(regex_pattern1 + regex_pattern2,
                        process_command, arg)
         return variable
-
     # return it-self if it's an invalid command-sub
     if arg.group(2):
         return arg.group(2)
