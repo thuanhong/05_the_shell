@@ -21,7 +21,6 @@ def find_executable_files(each_path, list_executable_files):
 
     Return list of files name
     """
-
     try:
         for filename in listdir(each_path):
             # if filename is executable file inside $PATH
@@ -29,7 +28,6 @@ def find_executable_files(each_path, list_executable_files):
                 list_executable_files.append(filename)
     except FileNotFoundError:
         pass
-
     return list_executable_files
 
 
@@ -39,7 +37,6 @@ def find_paths():
 
     Return list of files name
     """
-
     list_paths = []
     list_executable_files = ['cd', 'exit', 'export', 'unset', 'history']
     try:
@@ -49,11 +46,9 @@ def find_paths():
             list_paths.append(path)
     except Exception:
         pass
-
     # search for files inside each path
     for each_path in list_paths:
         find_executable_files(each_path, list_executable_files)
-
     return list_executable_files
 
 
@@ -65,18 +60,14 @@ def get_completer_function(text, state):
 
     Return the corresponding option
     """
-
     # default list of options
     names = find_paths() + listdir('.') + get_variables()
-
     # only current files and folder listed
     if not text or text == " ":
         names = listdir('.')
-
     # search for valid options
     options = [word for word in names if
                word.startswith(text.replace(" ", ""))]
-
     try:
         return options[state]
     except IndexError:
