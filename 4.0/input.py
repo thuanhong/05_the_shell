@@ -4,7 +4,7 @@ from param_expansion import param, change_user_input
 from command_sub import command_sub
 from handle_backslash import encode_backslash, decode_backslash, remove_backslash
 from history import save_input, find_command_history
-from logical import split_logical_operator, split_pipeline
+from logical import split_logical_operator
 
 
 def check_unfinished_input(string):
@@ -23,11 +23,9 @@ def read_input():
 
 
 def handle_input(user_input, set_vars, file_path, save_flag):
-    # print('filter -1:', user_input)
 
     # find '!':
     user_input = find_command_history(user_input, set_vars)
-    # print('filter 0:', user_input)
 
     # save:
     if save_flag:
@@ -35,34 +33,24 @@ def handle_input(user_input, set_vars, file_path, save_flag):
 
     # backslash:
     user_input = encode_backslash(user_input)
-    # print('filter 1:', user_input)
 
     # tilde:
     user_input = tilde(user_input)
-    # print('filter 2:', user_input)
 
     # param:
     user_input = param(user_input)
     user_input = change_user_input(user_input)
-    # print('filter 3:', user_input)
 
     # globbing:
     user_input = get_pathname_list(user_input)
-    # print('filter 4:', user_input)
 
     # command sub:
     user_input = command_sub(user_input)
-    # print('filter 5:', user_input)
 
     user_input = remove_backslash(user_input)
     user_input = decode_backslash(user_input)
-    # print('filter 6:', user_input)
-
-    # $?:
-    # print('filter 7:', [user_input])
 
     # logical:
     user_input = split_logical_operator(user_input)
-    # print('filter 8:', user_input)
 
     return user_input
