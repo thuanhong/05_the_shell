@@ -12,7 +12,6 @@ def get_user_directory(username):
     # Only if this directory exists
     if exists(user_directory) and isdir(user_directory):
         return expanduser("~") + "/../" + username[1:]
-
     return username
 
 
@@ -41,7 +40,6 @@ def tilde_expansion(raw_arguments,
         elif (argument.startswith("~") and not
               argument.startswith("~-") and not argument.startswith("~+")):
             raw_arguments[index] = get_user_directory(argument)
-
     return raw_arguments
 
 
@@ -57,7 +55,6 @@ def get_environ_variables():
     pwd_exist = False
     oldpwd_exist = False
     list_vars = [None, None, None]
-
     # If they exist, get their value
     if "USER" in environ:
         user_exist = True
@@ -68,7 +65,6 @@ def get_environ_variables():
     if "OLDPWD" in environ:
         oldpwd_exist = True
         list_vars[2] = environ["OLDPWD"]
-
     return user_exist, pwd_exist, oldpwd_exist, list_vars
 
 
