@@ -3,35 +3,47 @@ from re import sub
 
 
 def replace_variable(substring):
+    """
+    Search if $variable is in the shell's variable or not
+    if True, replace it with its value
+    """
     if substring.group(2):
         substring = substring.group(2)
         if substring == "$":
             return "$"
+        # replace with its value
         elif substring[1:] in set_variables:
             return set_variables[substring[1:]]
+        # replace with exit status
         elif substring[1:] == "?":
             return str(set_variables['exit_status'])
         else:
             return ""
+    # ignore what is in subshell
     elif substring.group(1):
         return substring.group(1)
 
 
 def change_user_input(user_input):
-    user_input  = sub(r"((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?:|(?<=(\s)))\$[\d\w\?]*)", replace_variable, user_input)
+    """
+    Search for $variable and $variable inside subshell
+    Replace them with their value if need
+
+    Return their value
+    """
+    user_input = sub(r"((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))\
+                       |(?<!\\)((?:|(?<=(\s)))\$[\d\w\?]*)",
+                     replace_variable, user_input)
     return user_input
 
 
 def get_param_and_word(variable, substring):
     """
-    variable = string
-    ví dụ: 'abc:=HOME'  hoặc 'abc:+PWD' hoặc 'abc%%USER'
-    substring = string - các kí tự đặc biệt nằm giữa string
-    ví dụ:  ':=' hoặc ':+' hoặc '%%'
-    return 2 string mới ( string cũ cắt đôi)
+    Split string by a defined symbol
     """
-
+    # first index become parameter (key)
     parameter = variable.split(substring, 1)[0]
+    # second index become word (value)
     if len(variable.split(substring, 1)) > 1:
         word = variable.split(substring, 1)[1]
     else:
@@ -42,9 +54,12 @@ def get_param_and_word(variable, substring):
 
 def getVar(variable):
     """
-    variable = string
-    sub-substring mới này sẽ được dùng để thay thế chính nó trong substring cũ
+    Depend on the symbol between parameter(key) and word(value)
+    Get the correct string from the parameter expansion
+
+    return a string, the result of parameter expansion
     """
+    # remove brackets
     try:
         if variable.group(0):
             variable = variable.group(0)
@@ -57,6 +72,7 @@ def getVar(variable):
         return set_variables[variable]
 
     elif variable.startswith("#"):
+        # return len of parameter
         if variable[1:] in set_variables:
             return str(len(set_variables[variable[1:]]))
         else:
@@ -64,110 +80,155 @@ def getVar(variable):
 
     elif ":-" in variable:
         parameter, word = get_param_and_word(variable, ":-")
+        # substitute parameter
         if parameter in set_variables and set_variables[parameter]:
             return set_variables[parameter]
-        elif parameter not in set_variables or (parameter in set_variables and not set_variables[parameter]):
+        # substitute word
+        elif (parameter not in set_variables or
+              (parameter in set_variables and not set_variables[parameter])):
             return word
 
     elif "-" in variable:
+        # substitute parameter
         parameter, word = get_param_and_word(variable, "-")
         if parameter in set_variables and Sset_variables[parameter]:
             return set_variables[parameter]
+        # substitute null
         elif parameter in set_variables and not set_variables[parameter]:
             return ""
+        # substitute word
         elif parameter not in set_variables:
             return word
 
     elif ":=" in variable:
         parameter, word = get_param_and_word(variable, ":=")
+        # substitute parameter
         if parameter in set_variables and set_variables[parameter]:
             return set_variables[parameter]
-        elif parameter not in set_variables or (parameter in set_variables and not set_variables[parameter]):
+        # assign word
+        elif (parameter not in set_variables or
+              (parameter in set_variables and not set_variables[parameter])):
             set_variables[parameter] = word
             return word
 
     elif "=" in variable:
         parameter, word = get_param_and_word(variable, "=")
+        # substitute parameter
         if parameter in set_variables and set_variables[parameter]:
             return set_variables[parameter]
+        # substitute null
         elif parameter in set_variables and not set_variables[parameter]:
             return ""
+        # assign word
         elif parameter not in set_variables:
             set_variables[parameter] = word
             return word
 
     elif ":+" in variable:
         parameter, word = get_param_and_word(variable, ":+")
+        # substitute word
         if parameter in set_variables:
             return word
+        # substitute null
         elif parameter in set_variables and not set_variables[parameter]:
-           	return ""
+            return ""
+        # substitute null
         elif parameter not in set_variables:
             return ""
 
     elif "+" in variable:
         parameter, word = get_param_and_word(variable, "+")
-        if parameter in set_variables or (parameter in set_variables and not set_variables[parameter]):
+        # substitute word
+        if (parameter in set_variables or
+           (parameter in set_variables and not set_variables[parameter])):
             return word
+        # substitute null
         elif parameter not in set_variables:
             return ""
 
     elif "%" in variable:
         variable = variable.replace("%", " ")
         parameter, word = get_param_and_word(variable, None)
-        if parameter in set_variables and (not set_variables[parameter].endswith(word) or not word):
+        # substitute parameter
+        if (parameter in set_variables and
+           (not set_variables[parameter].endswith(word) or not word)):
             return set_variables[parameter]
-        if parameter in set_variables and set_variables[parameter].endswith(word) and set_variables[parameter] :
+        # remove 'word' from the ending of parameter
+        if (parameter in set_variables and
+           set_variables[parameter].endswith(word) and
+           set_variables[parameter]):
             return set_variables[parameter][:-len(word)]
-        elif parameter not in set_variables or (parameter in set_variables and not set_variables[parameter]):
+        # substitute null
+        elif (parameter not in set_variables or
+              (parameter in set_variables and not set_variables[parameter])):
             return ""
 
     elif "#" in variable:
         variable = variable.replace("#", " ")
         parameter, word = get_param_and_word(variable, None)
-        if parameter in set_variables and (not set_variables[parameter].startswith(word) or not word):
+        # substitute parameter
+        if (parameter in set_variables and
+           (not set_variables[parameter].startswith(word) or not word)):
             return set_variables[parameter]
-        if parameter in set_variables and set_variables[parameter].startswith(word) and set_variables[parameter]:
+        # remove 'word' from the beginning of parameter
+        if (parameter in set_variables and
+           set_variables[parameter].startswith(word) and
+           set_variables[parameter]):
             return set_variables[parameter][len(word):]
-        elif parameter not in set_variables or (parameter in set_variables and not set_variables[parameter]):
+        # substitute null
+        elif (parameter not in set_variables or
+              (parameter in set_variables and not set_variables[parameter])):
             return ""
 
     if variable not in set_variables:
+        # variable doesn't have a value, substitute null
         return ""
 
 
-def search_bracket(arg):
+def search_bracket(argument):
     """
-    arg - type regex, sẽ dùng lệnh arg.group(x) để lấy ra dưỡi dạng substring   "${abc=HOME}"
-    return lại substring đó nhưng đã bị thay đổi
+    Recursively search for brackets and nested brackets
+    And change parameter follow user's wish
+
+    Return parameter value if any is substituted
     """
     try:
         for number in [1, 3, 5]:
-            if arg.group(number):
+            if argument.group(number):
+                # search for brackets and nested brackets
                 variable = sub(r"(?<!\\)\$\{(?:(?!(?<!\\)\").)*(?<!\\)\}",
-                               getVar, arg.group(number))
+                               getVar, argument.group(number))
                 return variable
     except AttributeError:
-        variable = sub(r"(?<!\\)\$\{(?:(?!(?<!\\)\").)*(?<!\\)\}", getVar, arg)
+        # do substitution
+        variable = sub(r"(?<!\\)\$\{(?:(?!(?<!\\)\").)*(?<!\\)\}",
+                       getVar, argument)
         return variable
-    if arg.group(2):
-        return arg.group(2)
-    elif arg.group(4):
-        return arg.group(4)
+    # return the parameter its self, no substitution made
+    if argument.group(2):
+        return argument.group(2)
+    elif argument.group(4):
+        return argument.group(4)
 
 
-def search_quotes(arg, set_vars):
+def search_quotes(argument, set_vars):
     """
-    argument = string
-    thường có dạng 'command + arguments'
-    return string trên sau khi sửa đổi
+    Search for ouside brackets, ignore quotes, escaped and subshell
     """
-
-    variable = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")|((?<!\\)\'(?:(?!(?<!\\)\').)*\')|((?<!\\)\$\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?<!\\)\$\{(?:(?!(?<!\\)\}).)*(?<!\\)\})",
-                   search_bracket, arg)
+    variable = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")\
+                   |((?<!\\)\'(?:(?!(?<!\\)\').)*\')\
+                   |((?<!\\)\$\((?:(?!(?<!\\)\)).)*(?<!\\)\))\
+                   |((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))\
+                   |((?<!\\)\$\{(?:(?!(?<!\\)\}).)*(?<!\\)\})",
+                   search_bracket, argument)
     return variable
 
 
-def param(argument):
+def expanse_parameter(argument):
+    """
+    Search for parameter expansion to do substitution
+
+    Return user's input after expansion
+    """
     argument = search_quotes(argument, environ)
     return argument
