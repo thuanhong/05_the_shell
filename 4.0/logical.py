@@ -44,7 +44,7 @@ def split_logical_operator(user_input):
 def run_logical_operator(command_list, set_vars):
     for index, item in enumerate(command_list):
         if item.startswith('(') and item.endswith(')'):
-            command = (dirname(abspath(__file__)) + "/intek-sh.py "
+            command = ("python3 " + dirname(abspath(__file__)) + "/intek-sh.py "
                        + item[1:-1] + " && exit $?")
             run_command(command.split(), set_vars)
         elif item not in ['&&', '||']:
