@@ -1,56 +1,55 @@
 #!/usr/bin/env python3
+from sys import argv
 from os import environ
+from os.path import dirname, abspath
+from completion import auto_complete
 from input import read_input, handle_input
 from logical import run_logical_operator
-from sys import argv
-from os.path import dirname, abspath
 from history import read_history_file
-import param_expansion as param_file
-import signals_handling as signal_file
 from signals_handling import control_signal
-from completion import auto_complete
 
 
 def create_variables(history_file_path):
-    variables = {'exit_status': 0, 'history': read_history_file(history_file_path)}
+    variables = {'exit_status': 0,
+                 'history': read_history_file(history_file_path)}
     variables.update(environ.copy())
     return variables
 
 
+def send_variables(set_variables):
+    import param_expansion as param_file
+    param_file.set_variables = set_variables
+    import signals_handling as signal_file
+    signal_file.set_variables = set_variables
+
+
+def control(history_file_path, user_input, set_variables, flag):
+    if user_input:
+        user_input = ' '.join(user_input)
+    else:
+        user_input = read_input()
+    user_input = handle_input(user_input, set_variables, history_file_path, flag)
+    run_logical_operator(user_input, set_variables)
+
+
 def main():
     history_file_path = dirname(abspath(__file__)) + '/.history.txt'
-
-    user_input = argv[1:]
-    variables = create_variables(history_file_path)
-    param_file.set_variables = variables
-    signal_file.set_variables = variables
-
+    set_variables = create_variables(history_file_path)
+    send_variables(set_variables)
     control_signal()
     auto_complete()
-
-    if not user_input:
+    user_input = argv[1:]
+    if user_input:
+        control(history_file_path, user_input, set_variables, False)
+    else:
         while True:
             try:
-                user_input = read_input()
-                # print('--> raw input:', user_input)
-
-                user_input = handle_input(user_input, variables, history_file_path, True)
-                # print('--> handle input:', user_input)
-
-                run_logical_operator(user_input, variables)
+                control(history_file_path, user_input, set_variables, True)
             except KeyboardInterrupt:
                 print('^C')
             except EOFError:
                 print()
                 quit()
-    else:
-        user_input = ' '.join(user_input)
-        # print('--> raw input:', user_input)
-
-        user_input = handle_input(user_input, variables, history_file_path, False)
-        # print('--> handle input:', user_input)
-
-        run_logical_operator(user_input, variables)
 
 
 if __name__ == '__main__':
