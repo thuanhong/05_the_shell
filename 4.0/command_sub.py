@@ -61,14 +61,12 @@ def search_command_sub(arg):
         # recursively find for deep-level nested:
         for number in [1, 3, 4]:
             if arg.group(number):
-                variable = sub(r"(?<!\\)\$\((?:(?!(?<!\\)\").)*(?<!\\)\)\
-                                 |(?<!\\)\`(?:(?!(?<!\\)\").)*(?<!\\)\`",
+                variable = sub(r"(?<!\\)\$\((?:(?!(?<!\\)\").)*(?<!\\)\)|(?<!\\)\`(?:(?!(?<!\\)\").)*(?<!\\)\`",
                                process_command, arg.group(number))
                 return variable
     except AttributeError:
         # stop recursion
-        variable = sub(r"(?<!\\)\$\((?:(?!(?<!\\)\").)*(?<!\\)\)\
-                         |(?<!\\)\`(?:(?!(?<!\\)\").)*(?<!\\)\`",
+        variable = sub(r"(?<!\\)\$\((?:(?!(?<!\\)\").)*(?<!\\)\)|(?<!\\)\`(?:(?!(?<!\\)\").)*(?<!\\)\`",
                        process_command, arg)
         return variable
 
@@ -102,7 +100,6 @@ def command_sub(command):
                         regex_pattern5,
                     search_command_sub, command))
     # Find and remove all quotes
-    user_command = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")\
-                         |((?<!\\)\'(?:(?!(?<!\\)\').)*\')",
+    user_command = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")|((?<!\\)\'(?:(?!(?<!\\)\').)*\')",
                        remove_quotes, user_command)
     return user_command
