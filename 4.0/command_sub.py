@@ -44,7 +44,6 @@ def process_command(command):
     command = command[0]
     # get output
     output = check_output([command] + arguments).decode("utf-8")
-
     # remove all line-break from output
     return output.replace("\n", "")
 
@@ -58,7 +57,6 @@ def search_command_sub(arg):
 
     Return substring that already changed
     """
-
     try:
         # recursively find for deep-level nested:
         for number in [1, 3, 4]:
@@ -90,15 +88,22 @@ def command_sub(command):
 
     Return the whole string that already changed
     """
+    # inside quotes
+    regex_pattern1 = r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")|"
+    regex_pattern2 = r"((?<!\\)\'(?:(?!(?<!\\)\').)*\')|"
+    # inside backquotes and $()
+    regex_pattern3 = r"((?<!\\)\`(?:(?!(?<!\\)\`).)*(?<!\\)\`)|"
+    regex_pattern4 = r"((?<!\\)\$\((?:(?!(?<!\\)\)).)*(?<!\\)\))|"
+    # inside ()
+    regex_pattern5 = r"((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))"
 
-    user_command = (sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")\
-                          |((?<!\\)\'(?:(?!(?<!\\)\').)*\')\
-                          |((?<!\\)\`(?:(?!(?<!\\)\`).)*(?<!\\)\`)\
-                          |((?<!\\)\$\((?:(?!(?<!\\)\)).)*(?<!\\)\))\
-                          |((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))",
+    user_command = (sub(regex_pattern1 + regex_pattern2 +
+                        regex_pattern3 + regex_pattern4 +
+                        regex_pattern5,
                     search_command_sub, command))
     # Find and remove all quotes
     user_command = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")\
                          |((?<!\\)\'(?:(?!(?<!\\)\').)*\')",
                        remove_quotes, user_command)
+    print(user_command)
     return user_command
