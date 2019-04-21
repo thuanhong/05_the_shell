@@ -41,19 +41,25 @@ def split_logical_operator(user_input):
     return [item.strip() for item in new_input if item.strip()]
 
 
+def check_command_validation(command_list, set_vars, index):
+    return ((set_vars['exit_status'] == 0 and
+             command_list[index - 1] == '||')
+            or (set_vars['exit_status'] != 0 and
+                command_list[index - 1] == '&&'))
+
+
+def control_execute_command(set_vars, command):
+    if command.startswith('(') and command.endswith(')'):
+        command = (dirname(abspath(__file__)) + "/intek-sh.py "
+                   + command[1:-1] + " && exit $?")
+        run_command(command.split(), set_vars)
+    elif command not in ['&&', '||']:
+        run_command(command.split(), set_vars)
+
+
 def run_logical_operator(command_list, set_vars):
     for index, item in enumerate(command_list):
-        if item.startswith('(') and item.endswith(')'):
-            command = ("python3 " + dirname(abspath(__file__)) + "/intek-sh.py "
-                       + item[1:-1] + " && exit $?")
-            run_command(command.split(), set_vars)
-        elif item not in ['&&', '||']:
-            try:
-                if ((set_vars['exit_status'] == 0 and
-                     command_list[index - 1] == '||')
-                    or (set_vars['exit_status'] != 0 and
-                        command_list[index - 1] == '&&')):
-                    continue
-            except IndexError:
-                pass
-            run_command(item.split(), set_vars)
+        if index == 0:
+            control_execute_command(set_vars, item)
+        elif not check_command_validation(command_list, set_vars, index):
+            control_execute_command(set_vars, item)
