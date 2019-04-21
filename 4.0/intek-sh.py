@@ -4,7 +4,7 @@ from os import environ
 from os.path import dirname, abspath
 from auto_completion import auto_complete
 from input import read_input, handle_input
-from logical import run_logical_operator
+from logical_operator import run_logical_operator
 from history import read_history_file
 from signals_handling import control_signal
 
