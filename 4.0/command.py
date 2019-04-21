@@ -1,6 +1,6 @@
 from os import environ, chdir, getcwd
 from os.path import exists, isfile, isdir, join
-from subprocess import run
+from subprocess import run, TimeoutExpired
 from history import show_history
 
 
@@ -183,6 +183,10 @@ def check_and_run_command(command, arguments, set_vars):
     except PermissionError:
         print('intek-sh: ' + command + ': Permission denied')
         set_vars['exit_status'] = 126
+    except TimeoutExpired:
+        set_vars['exit_status'] = 124
+    except Exception:
+        pass
 
 
 def run_external_command(command, arguments, set_vars):
