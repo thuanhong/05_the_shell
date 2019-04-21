@@ -105,5 +105,4 @@ def command_sub(command):
     user_command = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")\
                          |((?<!\\)\'(?:(?!(?<!\\)\').)*\')",
                        remove_quotes, user_command)
-    print(user_command)
     return user_command
