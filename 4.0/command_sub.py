@@ -4,8 +4,7 @@ from globbing import get_pathname_list
 
 
 def remove_quotes(substring):
-	# return substring without the starting and ending character
-
+    # return substring without the starting and ending character
     return substring.group(0)[1:-1]
 
 
