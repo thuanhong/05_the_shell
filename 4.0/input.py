@@ -1,7 +1,7 @@
 from globbing import get_pathname_list
 from tilde_expansion import expanse_tilde
-from param_expansion import expanse_parameter, change_user_input
-from command_sub import command_sub
+from parameter_expansion import expanse_parameter, change_user_input
+from command_substitution import command_sub
 from handle_backslash import encode_backslash, decode_backslash, \
                              remove_backslash
 from history import save_input, find_command_history
@@ -11,8 +11,7 @@ from logical import split_logical_operator
 def check_unfinished_input(string):
     """
     Check if user has finished input yet
-
-    @param: string: input from user
+    @param:  string: input from user
     @return: True if finished, False if not yet finished
     """
     if string.count('(') != string.count(')'):
@@ -36,10 +35,10 @@ def handle_input(user_input, set_vars, file_path, save_flag):
     """
     Handle input from user per specific case
 
-    @param: user_input: input from user
-    @param: set_vars: dictionary of variables
-    @param: file_path: history file path
-    @param: save_flag: boolean value check if need to save input or not
+    @param:  user_input: input from user
+    @param:  set_vars: dictionary of variables
+    @param:  file_path: history file path
+    @param:  save_flag: boolean value check if need to save input or not
 
     @return: user_input: user input after handle
     """

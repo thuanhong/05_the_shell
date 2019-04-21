@@ -2,7 +2,7 @@
 from sys import argv
 from os import environ
 from os.path import dirname, abspath
-from completion import auto_complete
+from auto_completion import auto_complete
 from input import read_input, handle_input
 from logical import run_logical_operator
 from history import read_history_file
@@ -17,7 +17,7 @@ def create_variables(history_file_path):
 
 
 def send_variables(set_variables):
-    import param_expansion as param_file
+    import parameter_expansion as param_file
     param_file.set_variables = set_variables
     import signals_handling as signal_file
     signal_file.set_variables = set_variables
