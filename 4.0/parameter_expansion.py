@@ -202,7 +202,7 @@ def search_bracket(argument):
         return argument.group(4)
 
 
-def search_quotes(argument, set_vars):
+def search_quotes(argument):
     """
     Search for ouside brackets, ignore quotes, escaped and subshell
     """
@@ -226,5 +226,5 @@ def expanse_parameter(argument):
 
     Return user's input after expansion
     """
-    argument = search_quotes(argument, environ)
+    argument = search_quotes(argument)
     return argument
