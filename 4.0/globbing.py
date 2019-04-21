@@ -18,22 +18,18 @@ def glob_asterik(argument):
 
     Return a list of all possible path to glob
     """
-
     splitted_argument = argument.split("/")
     for index, key in enumerate(splitted_argument):
         if not key:
             splitted_argument.pop(index)
-
     number = len(splitted_argument)
     symbols = ['.', '..', '.*']
     # create all possible string from list of symbols, with 'number' of times
     keywords = ['/'.join(i) for i in product(symbols, repeat=number)]
-
     # if string has more than one asterik, remove that string
     for index, key in enumerate(keywords):
         if too_much_asterisk(key):
             keywords[index] = ""
-
     return keywords
 
 
@@ -43,13 +39,11 @@ def pre_globbing(arguments):
 
     Return a list of path
     """
-
     for index, argument in enumerate(arguments):
         if argument.startswith(".*"):
             arguments[index] = glob_asterik(argument)
         else:
             arguments[index] = [argument]
-
     return (" ".join(sum(arguments, []))).split()
 
 
@@ -60,7 +54,6 @@ def get_pathname_list(arguments):
 
     Return a list of path after globbing
     """
-
     arguments = arguments.split()
     pathname_list = []
     for argument in pre_globbing(arguments):
@@ -70,5 +63,4 @@ def get_pathname_list(arguments):
             pathname_list += sorted(glob(argument))
         elif not glob(argument) and ".*" not in argument:
             pathname_list += [argument]
-
     return (" ").join(pathname_list)
