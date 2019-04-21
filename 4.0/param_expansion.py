@@ -31,7 +31,11 @@ def change_user_input(user_input):
 
     Return their value
     """
-    user_input = sub(r"((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))|(?<!\\)((?:|(?<=(\s)))\$[\d\w\?]*)",
+    # inside subshell
+    pattern1 = r"((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))|"
+    # catch all $variable
+    pattern2 = r"(?<!\\)((?:|(?<=(\s)))\$[\d\w\?]*)"
+    user_input = sub(pattern1 + pattern2,
                      replace_variable, user_input)
     return user_input
 
@@ -214,8 +218,17 @@ def search_quotes(argument, set_vars):
     """
     Search for ouside brackets, ignore quotes, escaped and subshell
     """
-    variable = sub(r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")|((?<!\\)\'(?:(?!(?<!\\)\').)*\')|((?<!\\)\$\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))|((?<!\\)\$\{(?:(?!(?<!\\)\}).)*(?<!\\)\})",
-                   search_bracket, argument)
+    # inside quotes
+    pattern1 = r"((?<!\\)\"(?:(?!(?<!\\)\").)*(?<!\\)\")|"
+    pattern2 = r"((?<!\\)\'(?:(?!(?<!\\)\').)*\')|"
+    # inside $() - command substitution
+    pattern3 = r"((?<!\\)\$\((?:(?!(?<!\\)\)).)*(?<!\\)\))|"
+    # inside () - subshell
+    pattern4 = r"((?<!\\)\((?:(?!(?<!\\)\)).)*(?<!\\)\))|"
+    # inside ${} - parameter substitution
+    pattern5 = r"((?<!\\)\$\{(?:(?!(?<!\\)\}).)*(?<!\\)\})"
+    variable = sub(pattern1 + pattern2 + pattern3 + pattern4 +
+                   pattern5, search_bracket, argument)
     return variable
 
 
