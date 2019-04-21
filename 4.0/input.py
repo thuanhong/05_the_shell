@@ -11,7 +11,8 @@ from logical import split_logical_operator
 def check_unfinished_input(string):
     """
     Check if user has finished input yet
-    @param:  string: input from user
+
+    @param: string: input from user
     @return: True if finished, False if not yet finished
     """
     if string.count('(') != string.count(')'):
@@ -35,10 +36,10 @@ def handle_input(user_input, set_vars, file_path, save_flag):
     """
     Handle input from user per specific case
 
-    @param:  user_input: input from user
-    @param:  set_vars: dictionary of variables
-    @param:  file_path: history file path
-    @param:  save_flag: boolean value check if need to save input or not
+    @param: user_input: input from user
+    @param: set_vars: dictionary of variables
+    @param: file_path: history file path
+    @param: save_flag: boolean value check if need to save input or not
 
     @return: user_input: user input after handle
     """
