@@ -8,9 +8,7 @@ from logical import split_logical_operator
 
 
 def check_unfinished_input(string):
-    if string.count('(') != string.count(')')\
-            or string.endswith('&') and not string.endswith('&&')\
-            or string.endswith('|') and not string.endswith('||'):
+    if string.count('(') != string.count(')'):
         return True
     return False
 
