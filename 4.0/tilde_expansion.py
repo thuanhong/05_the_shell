@@ -82,4 +82,4 @@ def expanse_tilde(arguments):
     arguments = tilde_expansion(arguments, pwd_exist,
                                 oldpwd_exist,
                                 list_vars[1], list_vars[2])
-    return (" ").join(arguments)
+    return " ".join(arguments)
