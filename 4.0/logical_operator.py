@@ -70,7 +70,7 @@ def control_execute_command(set_variables, command):
     @param command: user's command
     """
     if command.startswith('(') and command.endswith(')'):
-        command = (dirname(abspath(__file__)) + "/intek-sh.py "
+        command = ("python3 " + dirname(abspath(__file__)) + "/intek-sh.py "
                    + command[1:-1] + " && exit $?")
         run_command(command.split(), set_variables)
     elif command not in ['&&', '||']:
