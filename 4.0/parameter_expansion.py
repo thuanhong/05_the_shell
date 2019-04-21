@@ -51,7 +51,6 @@ def get_param_and_word(variable, substring):
         word = variable.split(substring, 1)[1]
     else:
         word = ""
-
     return parameter, word
 
 
@@ -70,17 +69,14 @@ def getVar(variable):
             variable = search_bracket(variable)
     except AttributeError:
         variable = variable[2:-1]
-
     if variable in set_variables:
         return set_variables[variable]
-
     elif variable.startswith("#"):
         # return len of parameter
         if variable[1:] in set_variables:
             return str(len(set_variables[variable[1:]]))
         else:
             return "0"
-
     elif ":-" in variable:
         parameter, word = get_param_and_word(variable, ":-")
         # substitute parameter
@@ -90,7 +86,6 @@ def getVar(variable):
         elif (parameter not in set_variables or
               (parameter in set_variables and not set_variables[parameter])):
             return word
-
     elif "-" in variable:
         # substitute parameter
         parameter, word = get_param_and_word(variable, "-")
@@ -102,7 +97,6 @@ def getVar(variable):
         # substitute word
         elif parameter not in set_variables:
             return word
-
     elif ":=" in variable:
         parameter, word = get_param_and_word(variable, ":=")
         # substitute parameter
@@ -113,7 +107,6 @@ def getVar(variable):
               (parameter in set_variables and not set_variables[parameter])):
             set_variables[parameter] = word
             return word
-
     elif "=" in variable:
         parameter, word = get_param_and_word(variable, "=")
         # substitute parameter
@@ -126,7 +119,6 @@ def getVar(variable):
         elif parameter not in set_variables:
             set_variables[parameter] = word
             return word
-
     elif ":+" in variable:
         parameter, word = get_param_and_word(variable, ":+")
         # substitute word
@@ -138,7 +130,6 @@ def getVar(variable):
         # substitute null
         elif parameter not in set_variables:
             return ""
-
     elif "+" in variable:
         parameter, word = get_param_and_word(variable, "+")
         # substitute word
@@ -148,7 +139,6 @@ def getVar(variable):
         # substitute null
         elif parameter not in set_variables:
             return ""
-
     elif "%" in variable:
         variable = variable.replace("%", " ")
         parameter, word = get_param_and_word(variable, None)
@@ -165,7 +155,6 @@ def getVar(variable):
         elif (parameter not in set_variables or
               (parameter in set_variables and not set_variables[parameter])):
             return ""
-
     elif "#" in variable:
         variable = variable.replace("#", " ")
         parameter, word = get_param_and_word(variable, None)
@@ -182,7 +171,6 @@ def getVar(variable):
         elif (parameter not in set_variables or
               (parameter in set_variables and not set_variables[parameter])):
             return ""
-
     if variable not in set_variables:
         # variable doesn't have a value, substitute null
         return ""
