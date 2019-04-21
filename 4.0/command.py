@@ -5,6 +5,12 @@ from history import show_history
 
 
 def check_and_move_dir(path, set_vars):
+    """
+    Change current directory base on path input
+
+    @param:  path: path to go to
+    @param:  set_vars: dictionary of variables
+    """
     if isdir(path):
         chdir(path)
         export_variable(['PWD=' + getcwd()], set_vars)
@@ -18,6 +24,12 @@ def check_and_move_dir(path, set_vars):
 
 
 def change_current_dir(arguments, set_vars):
+    """
+    Change current directory per case
+
+    @param:  arguments: cd command's arguments
+    @param:  set_vars: dictionary of variables
+    """
     if arguments:
         check_and_move_dir(arguments[0], set_vars)
     else:
@@ -29,6 +41,12 @@ def change_current_dir(arguments, set_vars):
 
 
 def print_env_variable(arguments, set_vars):
+    """
+    Print variable(s) in environment to screen
+
+    @param:  arguments: printenv command's arguments
+    @param:  set_vars: dictionary of variables
+    """
     if arguments:
         error_flag = False
         for arg in arguments:
@@ -47,6 +65,12 @@ def print_env_variable(arguments, set_vars):
 
 
 def export_variable(arguments, set_vars):
+    """
+    Create variable in environment
+
+    @param:  arguments: export command's arguments
+    @param:  set_vars: dictionary of variables
+    """
     if arguments:
         for arg in arguments:
             if arg[0].isnumeric() or arg.startswith('='):
@@ -65,6 +89,12 @@ def export_variable(arguments, set_vars):
 
 
 def unset_variable(arguments, set_vars):
+    """
+    Unset variable in environment
+
+    @param:  arguments: unset command's arguments
+    @param:  set_vars: dictionary of variables
+    """
     for arg in arguments:
         if arg[0].isnumeric() or arg.startswith('='):
             print("intek-sh: unset: `" + arg + "': not a valid identifier")
@@ -79,6 +109,12 @@ def unset_variable(arguments, set_vars):
 
 
 def exit_shell(arguments, set_vars):
+    """
+    Exit the shell
+
+    @param:  arguments: exit command's arguments
+    @param:  set_vars: dictionary of variables
+    """
     if arguments:
         try:
             if isinstance(int(arguments[0]), int):
@@ -98,6 +134,12 @@ def exit_shell(arguments, set_vars):
 
 
 def display_history(arguments, set_vars):
+    """
+    Display history of current user on screen
+
+    @param:  arguments: history command's arguments
+    @param:  set_vars: dictionary of variables
+    """
     if not arguments:
         show_history(arguments, set_vars)
         set_vars['exit_status'] = 0
@@ -114,6 +156,14 @@ def display_history(arguments, set_vars):
 
 
 def get_command_path(command, set_vars):
+    """
+    Get command's path from PATH in environment (set_vars)
+
+    @param:  command: command name
+    @param:  set_vars: dictionary of variables
+
+    @return: command_path: command's path
+    """
     for path in set_vars['PATH'].split(':'):
         command_path = join(path, command)
         if exists(command_path):
@@ -121,6 +171,13 @@ def get_command_path(command, set_vars):
 
 
 def check_and_run_command(command, arguments, set_vars):
+    """
+    Run extertal command using subprocess (run), except PermissionError case
+
+    @param:  command: command name
+    @param:  arguments: command's arguments
+    @param:  set_vars: dictionary of variables
+    """
     try:
         set_vars['exit_status'] = run([command] + arguments).returncode
     except PermissionError:
@@ -129,6 +186,13 @@ def check_and_run_command(command, arguments, set_vars):
 
 
 def run_external_command(command, arguments, set_vars):
+    """
+    Run extertal command using subprocess per specific case
+
+    @param:  command: command name
+    @param:  arguments: command's arguments
+    @param:  set_vars: dictionary of variables
+    """
     if '/' in command:
         if isfile(command):
             check_and_run_command(command, arguments, set_vars)
@@ -151,6 +215,12 @@ def run_external_command(command, arguments, set_vars):
 
 
 def run_command(user_input, set_vars):
+    """
+    Run command according to input from user
+
+    @param:  user_input: input from user
+    @param:  set_vars: dictionary of variables
+    """
     if user_input:
         command, arguments = user_input[0], user_input[1:]
         if command == 'cd':
