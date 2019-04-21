@@ -1,6 +1,6 @@
 from globbing import get_pathname_list
 from tilde_expansion import tilde
-from param_expansion import param, change_user_input
+from param_expansion import expanse_parameter, change_user_input
 from command_sub import command_sub
 from handle_backslash import encode_backslash, decode_backslash, remove_backslash
 from history import save_input, find_command_history
@@ -36,7 +36,7 @@ def handle_input(user_input, set_vars, file_path, save_flag):
     user_input = tilde(user_input)
 
     # param:
-    user_input = param(user_input)
+    user_input = expanse_parameter(user_input)
     user_input = change_user_input(user_input)
 
     # globbing:
