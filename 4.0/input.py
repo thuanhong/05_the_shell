@@ -5,7 +5,7 @@ from command_substitution import command_sub
 from handle_backslash import encode_backslash, decode_backslash, \
                              remove_backslash
 from history import save_input, find_command_history
-from logical import split_logical_operator
+from logical_operator import split_logical_operator
 
 
 def check_unfinished_input(string):
